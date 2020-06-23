@@ -12,8 +12,8 @@
     app:cardCornerRadius="8dp">
 
     <Button
-        android:background="@drawable/ic_favorite_red_24"
-        android:id="@+id/fav_btn"
+        android:background="@drawable/ic_favorite_shadow_24"
+        android:id="@+id/fav_btn1"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_gravity="bottom|end"

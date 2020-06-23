@@ -1,8 +1,11 @@
 package messenger.duoaccount.favouritelist;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class FavDB extends SQLiteOpenHelper {
 
@@ -13,7 +16,7 @@ public class FavDB extends SQLiteOpenHelper {
     public static String ITEM_TITLE = "itemTitle";
     public static String ITEM_IMAGE = "itemImage";
     public static String FAVOURITE_STATUS = "fStatus";
-    private static String CREATE_TABLE = "CREATE TABLE" + TABLE_NAME + "("
+    private static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "("
             + KEY_ID + " TEXT," + ITEM_TITLE + " TEXT,"
             + ITEM_IMAGE + " TEXT," + FAVOURITE_STATUS + " TEXT)";
 
@@ -23,11 +26,60 @@ public class FavDB extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
+        sqLiteDatabase.execSQL(CREATE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
+    }
+
+    // create empty table
+    public void insertEmpty() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        //enter your values
+        for (int x = 1; x < 11; x++) {
+            cv.put(KEY_ID, x);
+            cv.put(FAVOURITE_STATUS, "0");
+
+            db.insert(TABLE_NAME, null, cv);
+        }
+    }
+
+    // insert data into database
+    public void insertDataIntoDatabase(String item_title, int item_image, String id, String fav_status) {
+        SQLiteDatabase db;
+        db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(ITEM_TITLE, item_title);
+        cv.put(ITEM_IMAGE, item_image);
+        cv.put(KEY_ID, id);
+        cv.put(FAVOURITE_STATUS, fav_status);
+
+        db.insert(TABLE_NAME, null, cv);
+        Log.d("FavDBStatus", item_title + ", favstatus - " + fav_status + " - ." + cv);
+    }
+
+    //read all data
+    public Cursor readAllData (String id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql = "Select * from " + TABLE_NAME + " where " + KEY_ID +"="+id+"";
+        return  db.rawQuery(sql, null, null);
+    }
+
+    //remove line from database
+    public void removeFav (String id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sql = "UPDATE " + TABLE_NAME + " SET  " + FAVOURITE_STATUS +" ='0' WHERE " + KEY_ID+"="+id+"";
+        db.execSQL(sql);
+        Log.d("remove", id.toString());
+    }
+
+    //select all favourite list
+    public Cursor selectAllFavouriteList (){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql = "Select * from " + TABLE_NAME + " where " + FAVOURITE_STATUS + " ='1'";
+        return db.rawQuery(sql, null, null);
     }
 }
