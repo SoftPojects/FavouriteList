@@ -7,10 +7,12 @@
     tools:context=".ui.dashboard.DashboardFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycle_view"
+        android:id="@+id/recycle_view_dashboard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:paddingBottom="?attr/actionBarSize" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
